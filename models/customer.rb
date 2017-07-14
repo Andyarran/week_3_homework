@@ -39,7 +39,7 @@ attr_accessor :name, :funds
     INNER JOIN tickets
     ON customers.id = tickets.customer_id
     WHERE customer_id = #{@id};"
-    SqlRunner.run(sql)
+    SqlRunner.run(sql).count
   end
 
 

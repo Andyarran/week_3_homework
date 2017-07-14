@@ -36,15 +36,6 @@ end
 
 
 
-
-def customers_and_film
-sql = "SELECT customers.* FROM customers
-INNER JOIN tickets
-ON customers.id = tickets.customer_id
-WHERE customer_id = #{@id};"
-SqlRunner.run(sql)
-end
-
 ##### Class Functions involving all stuff
 
 

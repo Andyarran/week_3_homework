@@ -24,6 +24,13 @@ attr_accessor :title, :price
   end
 
 
+  def customers_at_film()
+    sql "SELECT tickets.* FROM tickets
+    INNER JOIN films
+    ON film.id = tickets.film_id
+    WHERE film_id = #{@id};"
+    SqlRunner.run(sql).count
+  end
 
 
   ###### Class Functions below to perform on ALL THINGS
