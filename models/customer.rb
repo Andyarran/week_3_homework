@@ -1,6 +1,6 @@
 require_relative("../db/sql_runner")
 
-class Customers
+class Customer
 
 attr_reader :id
 attr_accessor :name, :funds
@@ -13,7 +13,7 @@ attr_accessor :name, :funds
 
 
   def save()
-    sql = "INSERT INTO customers(name) VALUES ('#{ @name }' RETURNING id;"
+    sql = "INSERT INTO customers(name, funds) VALUES ('#{ @name }', #{@funds}) RETURNING id;"
     user = SqlRunner.run(sql)[0]
     @id = user['id'].to_i
   end
@@ -23,7 +23,6 @@ attr_accessor :name, :funds
     SqlRunner.run(sql)
   end
 
-  end
 
   def delete_one
     sql = "DELETE FROM customers WHERE id = #{@id}"
@@ -33,6 +32,14 @@ attr_accessor :name, :funds
   def buy_ticket(film)
     @funds -= film.price
     update()
+  end
+
+  def how_many_tickets()
+    sql "SELECT customers.* FROM customers
+    INNER JOIN tickets
+    ON customers.id = tickets.customer_id
+    WHERE customer_id = #{@id};"
+    SqlRunner.run(sql)
   end
 
 

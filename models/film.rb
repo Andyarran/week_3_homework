@@ -1,6 +1,6 @@
 require_relative("../db/sql_runner")
 
-class Films
+class Film
 
 attr_reader :id
 attr_accessor :title, :price
@@ -8,12 +8,12 @@ attr_accessor :title, :price
   def initialize(options)
     @id = options['id'].to_i
     @title = options['title']
-    @price = price['price'].to_f
+    @price = options['price'].to_f
   end
 
 
   def save()
-    sql = "INSERT INTO films(title) VALUES ('#{ @title }' RETURNING id;"
+    sql = "INSERT INTO films(title) VALUES ('#{ @title }') RETURNING id;"
     user = SqlRunner.run( sql ).first
     @id = user['id'].to_i
   end
@@ -31,13 +31,13 @@ attr_accessor :title, :price
   def self.find(id)
     sql = "SELECT * FROM films WHERE id = #{@id};"
     result = SqlRunner.run(sql)[0]
-    return Films.new(result)
+    return Film.new(result)
   end
 
   def self.all()
     sql = "SELECT * FROM films;"
     movies = SqlRunner.run(sql)[0]
-    result = movies.map { |movie| Films.new(movie) }
+    result = movies.map { |movie| Film.new(movie) }
     return result
   end
 

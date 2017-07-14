@@ -1,14 +1,14 @@
 require_relative("../db/sql_runner")
 
-class Tickets
+class Ticket
 
 attr_reader :id
 attr_accessor :customer_id, :film_id
 
 def initialize(options)
   @id = options['id']
-  @customer_id = options['customer_id']
-  @film_id = options['film_id']
+  @customer_id = options['customer_id'].to_i
+  @film_id = options['film_id'].to_i
 end
 
 
@@ -35,6 +35,16 @@ def film()
 end
 
 
+
+
+def customers_and_film
+sql = "SELECT customers.* FROM customers
+INNER JOIN tickets
+ON customers.id = tickets.customer_id
+WHERE customer_id = #{@id};"
+SqlRunner.run(sql)
+end
+
 ##### Class Functions involving all stuff
 
 
@@ -43,7 +53,7 @@ end
 def self.all()
   sql = "SELECT * FROM tickets;"
   tickets = SqlRunner.run(sql)
-  result = tickets.map { |ticket| Tickets.new(tickets)}
+  result = tickets.map { |ticket| Ticket.new(tickets)}
   return result
 end
 
