@@ -18,14 +18,21 @@ attr_accessor :name, :funds
     @id = user['id'].to_i
   end
 
+  def update()
+    sql = "UPDATE customers SET (name, funds) = ( '#{@name}', #{@funds} )"
+    SqlRunner.run(sql)
+  end
+
+  end
+
   def delete_one
     sql = "DELETE FROM customers WHERE id = #{@id}"
     SqlRunner.run(sql)
   end
 
-  def buy_ticket
-    sql = "UPDATE customers SET (name, funds) = ( #{funds} ) WHERE id = #{@id}"
-    SqlRunner.run(sql)
+  def buy_ticket(film)
+    @funds -= film.price
+    update()
   end
 
 
